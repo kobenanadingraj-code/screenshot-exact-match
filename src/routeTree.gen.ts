@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssistantRouteImport } from './routes/assistant'
+import { Route as DiagnosisRouteImport } from './routes/diagnosis'
+import { Route as EscalationsRouteImport } from './routes/escalations'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as IncidentsRouteImport } from './routes/incidents'
+import { Route as KnowledgeRouteImport } from './routes/knowledge'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as AssistantThreadIdRouteImport } from './routes/assistant_.$threadId'
+import { Route as IncidentsIncidentIdRouteImport } from './routes/incidents_.$incidentId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosisRoute = DiagnosisRouteImport.update({
+  id: '/diagnosis',
+  path: '/diagnosis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscalationsRoute = EscalationsRouteImport.update({
+  id: '/escalations',
+  path: '/escalations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncidentsRoute = IncidentsRouteImport.update({
+  id: '/incidents',
+  path: '/incidents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeRoute = KnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantThreadIdRoute = AssistantThreadIdRouteImport.update({
+  id: '/assistant_/$threadId',
+  path: '/assistant/$threadId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncidentsIncidentIdRoute = IncidentsIncidentIdRouteImport.update({
+  id: '/incidents_/$incidentId',
+  path: '/incidents/$incidentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/diagnosis': typeof DiagnosisRoute
+  '/escalations': typeof EscalationsRoute
+  '/history': typeof HistoryRoute
+  '/incidents': typeof IncidentsRoute
+  '/knowledge': typeof KnowledgeRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/assistant/$threadId': typeof AssistantThreadIdRoute
+  '/incidents/$incidentId': typeof IncidentsIncidentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/diagnosis': typeof DiagnosisRoute
+  '/escalations': typeof EscalationsRoute
+  '/history': typeof HistoryRoute
+  '/incidents': typeof IncidentsRoute
+  '/knowledge': typeof KnowledgeRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/assistant/$threadId': typeof AssistantThreadIdRoute
+  '/incidents/$incidentId': typeof IncidentsIncidentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/diagnosis': typeof DiagnosisRoute
+  '/escalations': typeof EscalationsRoute
+  '/history': typeof HistoryRoute
+  '/incidents': typeof IncidentsRoute
+  '/knowledge': typeof KnowledgeRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/assistant_/$threadId': typeof AssistantThreadIdRoute
+  '/incidents_/$incidentId': typeof IncidentsIncidentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/assistant'
+    | '/diagnosis'
+    | '/escalations'
+    | '/history'
+    | '/incidents'
+    | '/knowledge'
+    | '/reports'
+    | '/settings'
+    | '/assistant/$threadId'
+    | '/incidents/$incidentId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/assistant'
+    | '/diagnosis'
+    | '/escalations'
+    | '/history'
+    | '/incidents'
+    | '/knowledge'
+    | '/reports'
+    | '/settings'
+    | '/assistant/$threadId'
+    | '/incidents/$incidentId'
+  id:
+    | '__root__'
+    | '/'
+    | '/assistant'
+    | '/diagnosis'
+    | '/escalations'
+    | '/history'
+    | '/incidents'
+    | '/knowledge'
+    | '/reports'
+    | '/settings'
+    | '/assistant_/$threadId'
+    | '/incidents_/$incidentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistantRoute: typeof AssistantRoute
+  DiagnosisRoute: typeof DiagnosisRoute
+  EscalationsRoute: typeof EscalationsRoute
+  HistoryRoute: typeof HistoryRoute
+  IncidentsRoute: typeof IncidentsRoute
+  KnowledgeRoute: typeof KnowledgeRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
+  AssistantThreadIdRoute: typeof AssistantThreadIdRoute
+  IncidentsIncidentIdRoute: typeof IncidentsIncidentIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +182,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnosis': {
+      id: '/diagnosis'
+      path: '/diagnosis'
+      fullPath: '/diagnosis'
+      preLoaderRoute: typeof DiagnosisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escalations': {
+      id: '/escalations'
+      path: '/escalations'
+      fullPath: '/escalations'
+      preLoaderRoute: typeof EscalationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/incidents': {
+      id: '/incidents'
+      path: '/incidents'
+      fullPath: '/incidents'
+      preLoaderRoute: typeof IncidentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge': {
+      id: '/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof KnowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant_/$threadId': {
+      id: '/assistant_/$threadId'
+      path: '/assistant/$threadId'
+      fullPath: '/assistant/$threadId'
+      preLoaderRoute: typeof AssistantThreadIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/incidents_/$incidentId': {
+      id: '/incidents_/$incidentId'
+      path: '/incidents/$incidentId'
+      fullPath: '/incidents/$incidentId'
+      preLoaderRoute: typeof IncidentsIncidentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistantRoute: AssistantRoute,
+  DiagnosisRoute: DiagnosisRoute,
+  EscalationsRoute: EscalationsRoute,
+  HistoryRoute: HistoryRoute,
+  IncidentsRoute: IncidentsRoute,
+  KnowledgeRoute: KnowledgeRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
+  AssistantThreadIdRoute: AssistantThreadIdRoute,
+  IncidentsIncidentIdRoute: IncidentsIncidentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -28,3 +28,10 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application architecture
+- Keep the first prototype entirely client-side in a shared React demo context; this avoids implying a connected monitoring, AI, or storage service.
+- Give each operational module and incident/conversation detail a typed TanStack file route; this keeps navigation and thread identity stable.
+- Use the installed AI Elements primitives for the demonstration assistant; this preserves a future-compatible chat surface without live model calls.
+- Keep diagnostic validation and document assembly in browser-safe pure helpers with safety tests; this prevents unverified steps from becoming reported facts.
+- Generate PDF and DOCX files through lazy-loaded browser libraries; this makes exports functional without server dependencies.
