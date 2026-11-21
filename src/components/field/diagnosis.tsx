@@ -19,6 +19,7 @@ import {
   type DiagnosticStep,
   type CheckStatus,
 } from "@/lib/demo";
+import { diagnosisForIncident } from "@/lib/incident-workflow";
 import { PageHeading, IncidentPicker, SafetyNote, Status } from "./shared";
 import { toast } from "sonner";
 
@@ -38,6 +39,13 @@ function VerificationStep({
         {step.status === "Verified" && <CheckCircle2 className="size-4 text-success shrink-0" />}
       </div>
       <p>{step.description}</p>
+      <p className="mt-2">
+        <strong>Reason:</strong> {step.reason ?? step.description}
+      </p>
+      <p className="mt-2">
+        <strong>Expected result:</strong>{" "}
+        {step.expected ?? "An actual recorded observation; no outcome is assumed."}
+      </p>
       <Textarea
         aria-label={`Observed result: ${step.title}`}
         value={result}
@@ -82,13 +90,15 @@ export function Diagnosis() {
     setActiveIncidentId,
     stepsByIncident,
     setStepsByIncident,
+    setDocuments,
     addActivity,
+    analyses,
   } = useDemo();
   const [busy, setBusy] = useState(false);
   const [suggestion, setSuggestion] = useState(false);
   const incident = incidents.find((i) => i.id === activeIncidentId) ?? incidents[0];
   if (!incident) return <p>No incident available.</p>;
-  const steps = stepsByIncident[incident.id] ?? initialSteps.map((s) => ({ ...s }));
+  const steps = stepsByIncident[incident.id] ?? diagnosisForIncident(incident);
   const verified = steps.filter((s) => s.status === "Verified").length;
   return (
     <>
@@ -155,50 +165,57 @@ export function Diagnosis() {
             <span className="demo-pill">SIMULATED</span>
           </div>
           <SafetyNote />
-          {[
-            {
-              title: "Confirmed facts",
-              icon: CheckCircle2,
-              tone: "text-success",
-              text: `The supplied record reports: ${incident.description} The observed alarm is “${incident.alarms || "not provided"}”. Equipment category: ${incident.category}.`,
-            },
-            {
-              title: "Missing information",
-              icon: CircleHelp,
-              tone: "text-info",
-              text: "Physical state, power availability, exact model, interface status, alarm timestamps, supervision path reachability, and verified service impact have not been supplied.",
-            },
-            {
-              title: "Possible technical hypotheses",
-              icon: FlaskConical,
-              tone: "text-warning",
-              text: "Hypotheses only — not confirmed: local power interruption, supervision-path loss, or an equipment/interface issue. The current observations do not establish a root cause.",
-            },
-            {
-              title: "Recommended verification steps",
-              icon: ListChecks,
-              tone: "text-primary",
-              text: "Inspect physical indicators, safely review the local supply, gather interface and path evidence, review exact alarms, and correlate with NOC. Use authorized procedures and record actual observations.",
-            },
-            {
-              title: "Expected results",
+          {(
+            analyses[incident.id]?.sections.map((section) => ({
+              title: section.title,
               icon: ScanLine,
               tone: "text-info",
-              text: "Each verification should produce an observable result, including time and method where available. An unsuccessful test is evidence, not a confirmed diagnosis.",
-            },
-            {
-              title: "Escalation conditions",
-              icon: CircleAlert,
-              tone: "text-warning",
-              text: "Escalate if loss of supervision persists, safe access is unavailable, the available evidence is insufficient, or NOC confirms significant service impact.",
-            },
-          ].map((section, index) => (
+              text: section.text,
+            })) ?? [
+              {
+                title: "Confirmed facts",
+                icon: CheckCircle2,
+                tone: "text-success",
+                text: `The supplied record reports: ${incident.description} The observed alarm is “${incident.alarms || "not provided"}”. Equipment category: ${incident.category}.`,
+              },
+              {
+                title: "Missing information",
+                icon: CircleHelp,
+                tone: "text-info",
+                text: "Physical state, power availability, exact model, interface status, alarm timestamps, supervision path reachability, and verified service impact have not been supplied.",
+              },
+              {
+                title: "Possible technical hypotheses",
+                icon: FlaskConical,
+                tone: "text-warning",
+                text: "Hypotheses only — not confirmed: local power interruption, supervision-path loss, or an equipment/interface issue. The current observations do not establish a root cause.",
+              },
+              {
+                title: "Recommended verification steps",
+                icon: ListChecks,
+                tone: "text-primary",
+                text: "Inspect physical indicators, safely review the local supply, gather interface and path evidence, review exact alarms, and correlate with NOC. Use authorized procedures and record actual observations.",
+              },
+              {
+                title: "Expected results",
+                icon: ScanLine,
+                tone: "text-info",
+                text: "Each verification should produce an observable result, including time and method where available. An unsuccessful test is evidence, not a confirmed diagnosis.",
+              },
+              {
+                title: "Escalation conditions",
+                icon: CircleAlert,
+                tone: "text-warning",
+                text: "Escalate if loss of supervision persists, safe access is unavailable, the available evidence is insufficient, or NOC confirms significant service impact.",
+              },
+            ]
+          ).map((section, index) => (
             <div className="analysis-section" key={section.title}>
               <h3>
                 <section.icon className={`size-4 ${section.tone}`} />
                 {index + 1}. {section.title}
               </h3>
-              <p>{section.text}</p>
+              <p className="whitespace-pre-wrap">{section.text}</p>
             </div>
           ))}
           <Button
@@ -243,6 +260,9 @@ export function Diagnosis() {
               key={`${incident.id}-${step.id}`}
               step={step}
               onSave={(updated) => {
+                setDocuments((prev) =>
+                  prev.map((d) => (d.incidentId === incident.id ? { ...d, validated: false } : d)),
+                );
                 setStepsByIncident((prev) => ({
                   ...prev,
                   [incident.id]: steps.map((s) => (s.id === updated.id ? updated : s)),
@@ -255,9 +275,13 @@ export function Diagnosis() {
               }}
             />
           ))}
-          <Button asChild className="w-full mt-5 text-xs">
+          <Button
+            asChild
+            className="w-full mt-5 text-xs"
+            onClick={() => setActiveIncidentId(incident.id)}
+          >
             <Link to="/reports">
-              Prepare intervention report
+              Generate Intervention Report
               <ArrowRight />
             </Link>
           </Button>

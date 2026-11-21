@@ -8,6 +8,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useDemo } from "@/lib/demo-context";
 import type { IncidentStatus } from "@/lib/demo";
 import { PageHeading, Status, SafetyNote } from "./shared";
+import { IncidentAnalysisPanel } from "./incident-analysis";
+import { NewIncident } from "./incidents";
+import { canSetIncidentStatus } from "@/lib/incident-workflow";
 import { toast } from "sonner";
 
 export function IncidentDetail({ incidentId }: { incidentId: string }) {
@@ -54,6 +57,7 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
         subtitle={`${incident.id} · ${incident.location || "Location not provided"}`}
       >
         <div className="flex items-center gap-2">
+          <NewIncident existing={incident} />
           <Status value={incident.severity} />
           <Status value={incident.status} />
         </div>
@@ -217,13 +221,13 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
               </div>
             </TabsContent>
           </Tabs>
+          <IncidentAnalysisPanel incident={incident} />
         </div>
         <aside className="space-y-5">
           <div className="assistant-card">
             <h3 className="text-sm font-semibold mb-4">Contextual AI assistance</h3>
             <div className="flex flex-col gap-2">
               {[
-                { to: "/assistant", label: "Analyze this incident with AI", icon: ScanLine },
                 { to: "/diagnosis", label: "Open diagnostic checklist", icon: ScanLine },
                 { to: "/reports", label: "Generate intervention report", icon: FileText },
                 { to: "/escalations", label: "Prepare NOC escalation", icon: Network },
@@ -279,8 +283,12 @@ export function IncidentDetail({ incidentId }: { incidentId: string }) {
             <Button
               className="w-full mt-4 text-xs"
               onClick={() => {
-                if (!confirmed) {
-                  toast.error("Engineer confirmation is required to change operational status.");
+                if (!canSetIncidentStatus(newStatus, confirmed, steps)) {
+                  toast.error(
+                    ["Resolved", "Closed"].includes(newStatus)
+                      ? "Record verified diagnostic evidence and explicitly confirm before resolving or closing this incident."
+                      : "Engineer confirmation is required to change operational status.",
+                  );
                   return;
                 }
                 setIncidents((prev) =>

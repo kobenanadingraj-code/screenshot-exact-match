@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useDemo } from "@/lib/demo-context";
+import { filterIncidents } from "@/lib/incident-workflow";
 import { pageHead } from "@/lib/demo";
 import { PageHeading } from "@/components/field/shared";
 import {
@@ -21,11 +22,9 @@ function IncidentsPage() {
   const { incidents } = useDemo();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All statuses");
-  const filtered = incidents.filter(
-    (i) =>
-      `${i.id} ${i.site} ${i.category} ${i.domain}`.toLowerCase().includes(search.toLowerCase()) &&
-      (status === "All statuses" || i.status === status),
-  );
+  const [severity, setSeverity] = useState("All severities");
+  const [sort, setSort] = useState("Newest first");
+  const filtered = filterIncidents(incidents, search, status, severity, sort);
   return (
     <>
       <PageHeading
@@ -39,6 +38,10 @@ function IncidentsPage() {
         setSearch={setSearch}
         status={status}
         setStatus={setStatus}
+        severity={severity}
+        setSeverity={setSeverity}
+        sort={sort}
+        setSort={setSort}
       />
       <div className="panel">
         <div className="flex items-center justify-between px-5 py-4">

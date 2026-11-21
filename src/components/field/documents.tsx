@@ -15,12 +15,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useDemo } from "@/lib/demo-context";
-import { buildDocument, canConfirmDocument, type SavedDocument } from "@/lib/demo";
+import { buildDocument, canConfirmDocument, type SavedDocument, type Incident } from "@/lib/demo";
+import { incidentSource } from "@/lib/incident-workflow";
 import { exportDocument } from "@/lib/document-export";
 import { PageHeading, IncidentPicker, SafetyNote, Status } from "./shared";
 import { toast } from "sonner";
 
 export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) {
+  const { incidents, activeIncidentId, stepsByIncident, engineer } = useDemo();
+  const incident = incidents.find((i) => i.id === activeIncidentId) ?? incidents[0];
+  if (!incident)
+    return (
+      <PageHeading
+        title={kind === "report" ? "Intervention Reports" : "NOC Escalation"}
+        subtitle="Create an incident to prepare a document."
+      />
+    );
+  const source =
+    incidentSource(incident) + JSON.stringify(stepsByIncident[incident.id] ?? []) + engineer;
+  return (
+    <DocumentEditor key={`${kind}-${source}`} kind={kind} incident={incident} source={source} />
+  );
+}
+function DocumentEditor({
+  kind,
+  incident,
+  source,
+}: {
+  kind: "report" | "escalation";
+  incident: Incident;
+  source: string;
+}) {
   const {
     incidents,
     activeIncidentId,
@@ -31,25 +56,30 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
     setDocuments,
     addActivity,
   } = useDemo();
-  const [content, setContent] = useState("");
+  const savedDocument = documents.find(
+    (d) => d.incidentId === incident.id && d.kind === kind && d.source === source,
+  );
+  const [content, setContent] = useState<string | null>(
+    savedDocument?.content.replace(/^ESCALATION PRIORITY\n[^\n]*\n\n/, "") ?? null,
+  );
   const [editing, setEditing] = useState(false);
-  const [validated, setValidated] = useState(false);
+  const [validated, setValidated] = useState(savedDocument?.validated ?? false);
   const [busy, setBusy] = useState(false);
   const [priority, setPriority] = useState("P2 — High");
   const [exportBusy, setExportBusy] = useState(false);
-  const incident = incidents.find((i) => i.id === activeIncidentId) ?? incidents[0];
-  if (!incident) return <p>No incident available.</p>;
+
   const isReport = kind === "report";
   const title = isReport ? "Intervention Reports" : "NOC Escalation";
-  const text = content || buildDocument(kind, incident, stepsByIncident[incident.id] ?? []);
+  const text = content ?? buildDocument(kind, incident, stepsByIncident[incident.id] ?? []);
   const reference = `${isReport ? "RPT" : "ESC"}-${incident.id.replace("INC-", "")}`;
   function draft(): SavedDocument {
     return {
       id: reference,
+      source,
       kind,
       incidentId: incident?.id ?? "",
       title: isReport ? "Telecom intervention report" : "NOC escalation summary",
-      content: `${!isReport ? `ESCALATION PRIORITY\n${priority}\n\n` : ""}${text}`,
+      content: `${!isReport ? `ESCALATION PRIORITY\n${priority}\n\n` : ""}${text.replace(/Pending explicit engineer validation\./g, validated ? `Reviewed by ${engineer} — simulated record.` : "Pending explicit engineer validation.")}`,
       validated,
       date: new Date().toISOString(),
     };
@@ -94,7 +124,7 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
                 value={incident.id}
                 onChange={(id) => {
                   setActiveIncidentId(id);
-                  setContent("");
+                  setContent(null);
                   setValidated(false);
                 }}
               />
@@ -146,7 +176,11 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
               }}
             >
               {busy ? <LoaderCircle className="animate-spin" /> : <ScanLine />}
-              {isReport ? "Generate from observations" : "Prepare escalation summary"}
+              {busy
+                ? "Preparing document…"
+                : isReport
+                  ? "Generate Intervention Report"
+                  : "Prepare escalation summary"}
             </Button>
             <SafetyNote>
               Unverified findings are never recorded as confirmed. Review and edit the draft before
@@ -169,7 +203,7 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
             <div className="flex flex-col gap-2 mt-5">
               <Button variant="outline" className="text-xs" onClick={() => save(false)}>
                 <Save />
-                Save draft
+                {isReport ? "Save report" : "Save draft"}
               </Button>
               <Button className="text-xs" onClick={() => save(true)}>
                 <CheckCircle2 />
@@ -192,7 +226,7 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
                     onClick={() => {
                       setActiveIncidentId(d.incidentId);
                       setContent(d.content.replace(/^ESCALATION PRIORITY\n[^\n]*\n\n/, ""));
-                      setValidated(d.validated);
+                      setValidated(d.validated && d.source === source);
                     }}
                   >
                     <span className="technical">{d.id}</span>
@@ -212,7 +246,7 @@ export function DocumentsWorkspace({ kind }: { kind: "report" | "escalation" }) 
             <div className="flex gap-2">
               <Button size="sm" variant="outline" onClick={() => setEditing(!editing)}>
                 <Pencil />
-                {editing ? "Preview" : "Edit"}
+                {editing ? "Preview report" : "Edit report"}
               </Button>
               {(["pdf", "docx"] as const).map((format) => (
                 <Button

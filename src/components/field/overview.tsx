@@ -18,15 +18,16 @@ import { Button } from "@/components/ui/button";
 import { useDemo } from "@/lib/demo-context";
 import { PageHeading, SectionHeading, BrandSymbol } from "./shared";
 import { NewIncident, IncidentTable } from "./incidents";
+import { dashboardStats, domainDistribution } from "@/lib/incident-workflow";
 import siteAsset from "@/assets/telecom-site.asset.json";
 
 export function Overview() {
   const { incidents, documents, activities } = useDemo();
-  const open = incidents.filter((i) => !["Resolved", "Closed"].includes(i.status)).length;
+  const counts = dashboardStats(incidents, documents);
   const stats = [
     {
       title: "Total incidents",
-      value: incidents.length,
+      value: counts.total,
       icon: ClipboardList,
       tone: "",
       note: "Across all network domains",
@@ -34,23 +35,23 @@ export function Overview() {
     },
     {
       title: "Open incidents",
-      value: open,
+      value: counts.open,
       icon: CircleAlert,
       tone: "warning",
       note: "Awaiting engineer action",
-      trend: `${incidents.filter((i) => i.severity === "Critical").length} critical`,
+      trend: `${counts.critical} critical`,
     },
     {
       title: "Reports generated",
-      value: documents.filter((d) => d.kind === "report").length,
+      value: counts.reports,
       icon: FileCheck2,
       tone: "success",
-      note: "Engineer-reviewed documents",
+      note: "Saved reports · drafts and reviewed",
       trend: "This session",
     },
     {
       title: "Pending escalations",
-      value: incidents.filter((i) => i.status === "Pending Escalation").length,
+      value: counts.pending,
       icon: Network,
       tone: "critical",
       note: "Ready for NOC attention",
@@ -247,23 +248,21 @@ export function Overview() {
             <SectionHeading title="Network Domains">
               <Radio className="size-4 text-muted-foreground" />
             </SectionHeading>
-            <p className="text-[10px] text-muted-foreground mb-4">
-              Illustrative workload distribution
-            </p>
-            {[
-              { title: "RAN & Radio", value: "42%", className: "ran" },
-              { title: "Transmission", value: "32%", className: "transmission" },
-              { title: "Power Systems", value: "18%", className: "power" },
-              { title: "IP & Core", value: "8%", className: "other" },
-            ].map((domain) => (
+            <p className="text-[10px] text-muted-foreground mb-4">Current incident distribution</p>
+            {domainDistribution(incidents).map((domain) => (
               <div key={domain.title}>
                 <div className="flex items-center justify-between text-[10px] mt-4">
                   <span className="text-muted-foreground">{domain.title}</span>
-                  <span className="technical">{domain.value}</span>
+                  <span className="technical">{domain.percentage}%</span>
                 </div>
                 <div className="distribution-row mt-2">
                   <div className="distribution-track">
-                    <span className={domain.className} />
+                    <progress
+                      className={`w-full h-1.5 accent-primary ${domain.className}`}
+                      max={100}
+                      value={domain.percentage}
+                      aria-label={`${domain.title} incident share`}
+                    />
                   </div>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { reportFromIncident } from "./incident-workflow";
 export type IncidentStatus =
   "New" | "Under Analysis" | "In Progress" | "Pending Escalation" | "Resolved" | "Closed";
 export type Severity = "Critical" | "High" | "Medium" | "Low";
@@ -21,6 +22,8 @@ export interface DiagnosticStep {
   id: string;
   title: string;
   description: string;
+  reason?: string;
+  expected?: string;
   status: CheckStatus;
   result: string;
 }
@@ -43,6 +46,7 @@ export interface Activity {
   time: string;
 }
 export interface SavedDocument {
+  source?: string;
   id: string;
   kind: "report" | "escalation";
   incidentId: string;
@@ -215,7 +219,7 @@ export function buildDocument(
 ): string {
   const verified = verifiedResults(steps);
   return kind === "report"
-    ? `INCIDENT DESCRIPTION\n${incident.description}\n\nEQUIPMENT INVOLVED\n${incident.category} · ${incident.model}\n\nTECHNICIAN OBSERVATIONS\n${incident.observations || "Not provided."}\n\nDIAGNOSTIC PROCESS\nReview of provided observations. Unperformed checks are not recorded as completed.\n\nVERIFIED RESULTS\n${verified}\n\nACTIONS ACTUALLY PERFORMED\nNo corrective action confirmed. Verification observations appear above.\n\nOUTSTANDING ISSUES\nRoot cause not confirmed. Supervision communication requires investigation.\n\nRESOLUTION STATUS\n${incident.status}. No AI-confirmed resolution.\n\nRECOMMENDATIONS — HUMAN REVIEW REQUIRED\nVerify equipment state, local power, supervision path, and exact alarm timestamps using authorized procedures.\n\nTECHNICIAN VALIDATION\nPending explicit engineer validation.`
+    ? reportFromIncident(incident, steps)
     : `AFFECTED EQUIPMENT\n${incident.category} · ${incident.model}\n\nALARM DESCRIPTION\n${incident.alarms || "Not provided."}\n\nINCIDENT START TIME\n${incident.date.replace("T", " ")} — supplied demonstration record; timezone not provided.\n\nIMPACT\nService impact not confirmed. NOC correlation requested.\n\nTESTS PERFORMED AND RESULTS\n${verified}\n\nACTIONS ALREADY TAKEN\nNo corrective action confirmed.\n\nOUTSTANDING QUESTIONS\nIs the device powered? Is the supervision path reachable? Which services are affected?\n\nSUPPORT REQUESTED\nPlease correlate network events, verify impact, and advise on the supervision path.\n\nATTACHED EVIDENCE\n${incident.attachments.length ? incident.attachments.join(", ") : "No evidence attached."}\n\nENGINEER VALIDATION\nPending explicit engineer validation.`;
 }
 export function demoResponse(prompt: string, incident: Incident): string {
