@@ -454,6 +454,9 @@
   grid-template-columns: minmax(0, 1fr) 306px;
   gap: 23px;
 }
+.overview-grid > * {
+  min-width: 0;
+}
 .section-heading {
   display: flex;
   justify-content: space-between;

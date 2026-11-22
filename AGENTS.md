@@ -34,4 +34,6 @@ use the editor.
 - Give each operational module and incident/conversation detail a typed TanStack file route; this keeps navigation and thread identity stable.
 - Use the installed AI Elements primitives for the demonstration assistant; this preserves a future-compatible chat surface without live model calls.
 - Keep diagnostic validation and document assembly in browser-safe pure helpers with safety tests; this prevents unverified steps from becoming reported facts.
+- Store incident analyses and per-incident verification steps in the shared session context, using incident source fingerprints to invalidate outdated assessments and document validation after record changes.
+- Derive dashboard KPIs and domain distributions from current incident/report records, and cascade incident deletion to linked analyses, checks, and reports to prevent inconsistent counts.
 - Generate PDF and DOCX files through lazy-loaded browser libraries; this makes exports functional without server dependencies.
