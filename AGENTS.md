@@ -31,6 +31,7 @@ use the editor.
 
 ## Application architecture
 - Keep the first prototype entirely client-side in a shared React demo context; this avoids implying a connected monitoring, AI, or storage service.
+- Define the demo context and consumer hook outside the provider component module so Fast Refresh cannot recreate context identity while consumers remain mounted.
 - Give each operational module and incident/conversation detail a typed TanStack file route; this keeps navigation and thread identity stable.
 - Use the installed AI Elements primitives for the demonstration assistant; this preserves a future-compatible chat surface without live model calls.
 - Keep diagnostic validation and document assembly in browser-safe pure helpers with safety tests; this prevents unverified steps from becoming reported facts.

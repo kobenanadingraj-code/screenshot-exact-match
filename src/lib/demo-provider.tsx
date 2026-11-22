@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
+import { DemoContext } from "./demo-context";
 import {
   sampleIncidents,
   initialSteps,
@@ -83,14 +84,8 @@ function useDemoState() {
     resetDemo,
   };
 }
-type DemoState = ReturnType<typeof useDemoState>;
-const DemoContext = createContext<DemoState | null>(null);
+export type DemoState = ReturnType<typeof useDemoState>;
 export function DemoProvider({ children }: { children: ReactNode }) {
   const state = useDemoState();
   return <DemoContext.Provider value={state}>{children}</DemoContext.Provider>;
-}
-export function useDemo() {
-  const context = useContext(DemoContext);
-  if (!context) throw new Error("DemoProvider is required");
-  return context;
 }
