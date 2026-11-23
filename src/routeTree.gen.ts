@@ -9,118 +9,147 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AssistantRouteImport } from './routes/assistant'
-import { Route as DiagnosisRouteImport } from './routes/diagnosis'
-import { Route as EscalationsRouteImport } from './routes/escalations'
-import { Route as HistoryRouteImport } from './routes/history'
-import { Route as IncidentsRouteImport } from './routes/incidents'
-import { Route as KnowledgeRouteImport } from './routes/knowledge'
-import { Route as ReportsRouteImport } from './routes/reports'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as AssistantThreadIdRouteImport } from './routes/assistant_.$threadId'
-import { Route as IncidentsIncidentIdRouteImport } from './routes/incidents_.$incidentId'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedDiagnosisRouteImport } from './routes/_authenticated/diagnosis'
+import { Route as AuthenticatedEscalationsRouteImport } from './routes/_authenticated/escalations'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedIncidentsRouteImport } from './routes/_authenticated/incidents'
+import { Route as AuthenticatedKnowledgeRouteImport } from './routes/_authenticated/knowledge'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedAssistantThreadIdRouteImport } from './routes/_authenticated/assistant_.$threadId'
+import { Route as AuthenticatedIncidentsIncidentIdRouteImport } from './routes/_authenticated/incidents_.$incidentId'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AssistantRoute = AssistantRouteImport.update({
+const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const DiagnosisRoute = DiagnosisRouteImport.update({
+const AuthenticatedDiagnosisRoute = AuthenticatedDiagnosisRouteImport.update({
   id: '/diagnosis',
   path: '/diagnosis',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const EscalationsRoute = EscalationsRouteImport.update({
-  id: '/escalations',
-  path: '/escalations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HistoryRoute = HistoryRouteImport.update({
+const AuthenticatedEscalationsRoute =
+  AuthenticatedEscalationsRouteImport.update({
+    id: '/escalations',
+    path: '/escalations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   id: '/history',
   path: '/history',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const IncidentsRoute = IncidentsRouteImport.update({
+const AuthenticatedIncidentsRoute = AuthenticatedIncidentsRouteImport.update({
   id: '/incidents',
   path: '/incidents',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const KnowledgeRoute = KnowledgeRouteImport.update({
+const AuthenticatedKnowledgeRoute = AuthenticatedKnowledgeRouteImport.update({
   id: '/knowledge',
   path: '/knowledge',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ReportsRoute = ReportsRouteImport.update({
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AssistantThreadIdRoute = AssistantThreadIdRouteImport.update({
-  id: '/assistant_/$threadId',
-  path: '/assistant/$threadId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IncidentsIncidentIdRoute = IncidentsIncidentIdRouteImport.update({
-  id: '/incidents_/$incidentId',
-  path: '/incidents/$incidentId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedAssistantThreadIdRoute =
+  AuthenticatedAssistantThreadIdRouteImport.update({
+    id: '/assistant_/$threadId',
+    path: '/assistant/$threadId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedIncidentsIncidentIdRoute =
+  AuthenticatedIncidentsIncidentIdRouteImport.update({
+    id: '/incidents_/$incidentId',
+    path: '/incidents/$incidentId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/assistant': typeof AssistantRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/escalations': typeof EscalationsRoute
-  '/history': typeof HistoryRoute
-  '/incidents': typeof IncidentsRoute
-  '/knowledge': typeof KnowledgeRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/assistant/$threadId': typeof AssistantThreadIdRoute
-  '/incidents/$incidentId': typeof IncidentsIncidentIdRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/assistant': typeof AuthenticatedAssistantRoute
+  '/diagnosis': typeof AuthenticatedDiagnosisRoute
+  '/escalations': typeof AuthenticatedEscalationsRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/incidents': typeof AuthenticatedIncidentsRoute
+  '/knowledge': typeof AuthenticatedKnowledgeRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/incidents/$incidentId': typeof AuthenticatedIncidentsIncidentIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/assistant': typeof AssistantRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/escalations': typeof EscalationsRoute
-  '/history': typeof HistoryRoute
-  '/incidents': typeof IncidentsRoute
-  '/knowledge': typeof KnowledgeRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/assistant/$threadId': typeof AssistantThreadIdRoute
-  '/incidents/$incidentId': typeof IncidentsIncidentIdRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/assistant': typeof AuthenticatedAssistantRoute
+  '/diagnosis': typeof AuthenticatedDiagnosisRoute
+  '/escalations': typeof AuthenticatedEscalationsRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/incidents': typeof AuthenticatedIncidentsRoute
+  '/knowledge': typeof AuthenticatedKnowledgeRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/assistant/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/incidents/$incidentId': typeof AuthenticatedIncidentsIncidentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/assistant': typeof AssistantRoute
-  '/diagnosis': typeof DiagnosisRoute
-  '/escalations': typeof EscalationsRoute
-  '/history': typeof HistoryRoute
-  '/incidents': typeof IncidentsRoute
-  '/knowledge': typeof KnowledgeRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/assistant_/$threadId': typeof AssistantThreadIdRoute
-  '/incidents_/$incidentId': typeof IncidentsIncidentIdRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/diagnosis': typeof AuthenticatedDiagnosisRoute
+  '/_authenticated/escalations': typeof AuthenticatedEscalationsRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/incidents': typeof AuthenticatedIncidentsRoute
+  '/_authenticated/knowledge': typeof AuthenticatedKnowledgeRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/assistant_/$threadId': typeof AuthenticatedAssistantThreadIdRoute
+  '/_authenticated/incidents_/$incidentId': typeof AuthenticatedIncidentsIncidentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/reset-password'
     | '/assistant'
     | '/diagnosis'
     | '/escalations'
@@ -133,7 +162,8 @@ export interface FileRouteTypes {
     | '/incidents/$incidentId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/auth'
+    | '/reset-password'
     | '/assistant'
     | '/diagnosis'
     | '/escalations'
@@ -142,131 +172,171 @@ export interface FileRouteTypes {
     | '/knowledge'
     | '/reports'
     | '/settings'
+    | '/'
     | '/assistant/$threadId'
     | '/incidents/$incidentId'
   id:
     | '__root__'
-    | '/'
-    | '/assistant'
-    | '/diagnosis'
-    | '/escalations'
-    | '/history'
-    | '/incidents'
-    | '/knowledge'
-    | '/reports'
-    | '/settings'
-    | '/assistant_/$threadId'
-    | '/incidents_/$incidentId'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/assistant'
+    | '/_authenticated/diagnosis'
+    | '/_authenticated/escalations'
+    | '/_authenticated/history'
+    | '/_authenticated/incidents'
+    | '/_authenticated/knowledge'
+    | '/_authenticated/reports'
+    | '/_authenticated/settings'
+    | '/_authenticated/'
+    | '/_authenticated/assistant_/$threadId'
+    | '/_authenticated/incidents_/$incidentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AssistantRoute: typeof AssistantRoute
-  DiagnosisRoute: typeof DiagnosisRoute
-  EscalationsRoute: typeof EscalationsRoute
-  HistoryRoute: typeof HistoryRoute
-  IncidentsRoute: typeof IncidentsRoute
-  KnowledgeRoute: typeof KnowledgeRoute
-  ReportsRoute: typeof ReportsRoute
-  SettingsRoute: typeof SettingsRoute
-  AssistantThreadIdRoute: typeof AssistantThreadIdRoute
-  IncidentsIncidentIdRoute: typeof IncidentsIncidentIdRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/assistant': {
-      id: '/assistant'
+    '/_authenticated/assistant': {
+      id: '/_authenticated/assistant'
       path: '/assistant'
       fullPath: '/assistant'
-      preLoaderRoute: typeof AssistantRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAssistantRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/diagnosis': {
-      id: '/diagnosis'
+    '/_authenticated/diagnosis': {
+      id: '/_authenticated/diagnosis'
       path: '/diagnosis'
       fullPath: '/diagnosis'
-      preLoaderRoute: typeof DiagnosisRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedDiagnosisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/escalations': {
-      id: '/escalations'
+    '/_authenticated/escalations': {
+      id: '/_authenticated/escalations'
       path: '/escalations'
       fullPath: '/escalations'
-      preLoaderRoute: typeof EscalationsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedEscalationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/history': {
-      id: '/history'
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
       path: '/history'
       fullPath: '/history'
-      preLoaderRoute: typeof HistoryRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/incidents': {
-      id: '/incidents'
+    '/_authenticated/incidents': {
+      id: '/_authenticated/incidents'
       path: '/incidents'
       fullPath: '/incidents'
-      preLoaderRoute: typeof IncidentsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIncidentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/knowledge': {
-      id: '/knowledge'
+    '/_authenticated/knowledge': {
+      id: '/_authenticated/knowledge'
       path: '/knowledge'
       fullPath: '/knowledge'
-      preLoaderRoute: typeof KnowledgeRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedKnowledgeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/reports': {
-      id: '/reports'
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
       path: '/reports'
       fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/settings': {
-      id: '/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/assistant_/$threadId': {
-      id: '/assistant_/$threadId'
+    '/_authenticated/assistant_/$threadId': {
+      id: '/_authenticated/assistant_/$threadId'
       path: '/assistant/$threadId'
       fullPath: '/assistant/$threadId'
-      preLoaderRoute: typeof AssistantThreadIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAssistantThreadIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/incidents_/$incidentId': {
-      id: '/incidents_/$incidentId'
+    '/_authenticated/incidents_/$incidentId': {
+      id: '/_authenticated/incidents_/$incidentId'
       path: '/incidents/$incidentId'
       fullPath: '/incidents/$incidentId'
-      preLoaderRoute: typeof IncidentsIncidentIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIncidentsIncidentIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedDiagnosisRoute: typeof AuthenticatedDiagnosisRoute
+  AuthenticatedEscalationsRoute: typeof AuthenticatedEscalationsRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedIncidentsRoute: typeof AuthenticatedIncidentsRoute
+  AuthenticatedKnowledgeRoute: typeof AuthenticatedKnowledgeRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAssistantThreadIdRoute: typeof AuthenticatedAssistantThreadIdRoute
+  AuthenticatedIncidentsIncidentIdRoute: typeof AuthenticatedIncidentsIncidentIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedDiagnosisRoute: AuthenticatedDiagnosisRoute,
+  AuthenticatedEscalationsRoute: AuthenticatedEscalationsRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedIncidentsRoute: AuthenticatedIncidentsRoute,
+  AuthenticatedKnowledgeRoute: AuthenticatedKnowledgeRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAssistantThreadIdRoute: AuthenticatedAssistantThreadIdRoute,
+  AuthenticatedIncidentsIncidentIdRoute: AuthenticatedIncidentsIncidentIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AssistantRoute: AssistantRoute,
-  DiagnosisRoute: DiagnosisRoute,
-  EscalationsRoute: EscalationsRoute,
-  HistoryRoute: HistoryRoute,
-  IncidentsRoute: IncidentsRoute,
-  KnowledgeRoute: KnowledgeRoute,
-  ReportsRoute: ReportsRoute,
-  SettingsRoute: SettingsRoute,
-  AssistantThreadIdRoute: AssistantThreadIdRoute,
-  IncidentsIncidentIdRoute: IncidentsIncidentIdRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -10,11 +10,11 @@ import {
   IncidentFilters,
   DownloadIncidents,
 } from "@/components/field/incidents";
-export const Route = createFileRoute("/incidents")({
+export const Route = createFileRoute("/_authenticated/incidents")({
   head: () =>
     pageHead(
       "Incident Management",
-      "Create, track, and document simulated telecom incidents with engineer-controlled statuses.",
+      "Create, track, and document telecom incidents with engineer-controlled statuses.",
     ),
   component: IncidentsPage,
 });
@@ -45,7 +45,7 @@ function IncidentsPage() {
       />
       <div className="panel">
         <div className="flex items-center justify-between px-5 py-4">
-          <span className="text-xs">{filtered.length} demonstration incidents</span>
+          <span className="text-xs">{filtered.length} incidents</span>
           <DownloadIncidents incidents={filtered} />
         </div>
         <IncidentTable incidents={filtered} />

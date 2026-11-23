@@ -11,7 +11,7 @@ import {
   type SavedDocument,
 } from "./demo";
 
-import { type IncidentAnalysis, diagnosisForIncident } from "./incident-workflow";
+import { type IncidentAnalysis, diagnosisForIncident, generateIncidentAnalysis } from "./incident-workflow";
 
 function useDemoState() {
   const [incidents, setIncidents] = useState<Incident[]>(sampleIncidents);
@@ -82,6 +82,13 @@ function useDemoState() {
     activeIncidentId,
     setActiveIncidentId,
     resetDemo,
+    mode: "demo" as "demo" | "connected",
+    signOut: async () => {},
+    requestAnalysis: async (id: string, _prompt = "Analyze this incident", _resume = false) => {
+      const incident = incidents.find(i => i.id === id);
+      if (!incident) throw new Error("Incident unavailable");
+      return generateIncidentAnalysis(incident);
+    },
   };
 }
 export type DemoState = ReturnType<typeof useDemoState>;

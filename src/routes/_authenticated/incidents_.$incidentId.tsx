@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { IncidentDetail } from "@/components/field/incident-detail";
 import { pageHead } from "@/lib/demo";
-export const Route = createFileRoute("/incidents_/$incidentId")({
+export const Route = createFileRoute("/_authenticated/incidents_/$incidentId")({
   head: ({ params }) =>
     pageHead(
       `Incident ${params.incidentId}`,

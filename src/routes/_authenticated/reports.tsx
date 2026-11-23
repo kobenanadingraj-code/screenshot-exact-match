@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DocumentsWorkspace } from "@/components/field/documents";
 import { pageHead } from "@/lib/demo";
-export const Route = createFileRoute("/reports")({
+export const Route = createFileRoute("/_authenticated/reports")({
   head: () =>
     pageHead(
       "Intervention Reports",
-      "Prepare, review, and export simulated telecom intervention reports in PDF and DOCX.",
+      "Prepare, review, and export telecom intervention reports in PDF and DOCX.",
     ),
   component: ReportsPage,
 });

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DocumentsWorkspace } from "@/components/field/documents";
 import { pageHead } from "@/lib/demo";
-export const Route = createFileRoute("/escalations")({
+export const Route = createFileRoute("/_authenticated/escalations")({
   head: () =>
     pageHead(
       "NOC Escalation",

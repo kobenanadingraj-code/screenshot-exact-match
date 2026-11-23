@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Diagnosis } from "@/components/field/diagnosis";
 import { pageHead } from "@/lib/demo";
-export const Route = createFileRoute("/diagnosis")({
+export const Route = createFileRoute("/_authenticated/diagnosis")({
   head: () =>
     pageHead(
       "Smart Diagnosis",

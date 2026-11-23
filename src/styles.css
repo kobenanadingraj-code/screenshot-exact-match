@@ -1154,3 +1154,7 @@
     animation: none !important;
   }
 }
+
+:root { --google-background: #FFFFFF; --google-border: #747775; --google-foreground: #1F1F1F; }
+.dark { --google-background: #131314; --google-border: #8E918F; --google-foreground: #E3E3E3; }
+.google-auth { background: var(--google-background); border-color: var(--google-border); color: var(--google-foreground); }
