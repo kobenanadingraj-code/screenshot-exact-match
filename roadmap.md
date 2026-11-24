@@ -8,6 +8,7 @@
 - [x] Test the complete incident-to-report workflow on desktop and mobile without redesigning the dashboard.
 ## Phase 3
 - [x] Repair missing AI dependencies and workspace type incompatibilities; verify the app opens.
+- [x] Audit all record consumers and unify remaining analysis, conversation, history and status types without changing saved data.
 - [ ] Connect registration, login, profiles, protected pages and logout.
 - [ ] Persist owner-scoped incidents, analyses, checks, reports and history.
 - [ ] Connect real structured AI analysis and assistant without simulated fallbacks.

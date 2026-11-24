@@ -1,16 +1,8 @@
 import type { Incident, DiagnosticStep, SavedDocument, Severity } from "./demo";
+import type { WorkspaceSnapshot } from "./workspace-schema";
 
-export interface AnalysisSection {
-  id: string;
-  title: string;
-  text: string;
-}
-export interface IncidentAnalysis {
-  incidentId: string;
-  source: string;
-  sections: AnalysisSection[];
-  generatedAt: string;
-}
+export type IncidentAnalysis = WorkspaceSnapshot["analyses"][string];
+export type AnalysisSection = IncidentAnalysis["sections"][number];
 export function incidentSource(incident: Incident): string {
   return JSON.stringify(incident);
 }
