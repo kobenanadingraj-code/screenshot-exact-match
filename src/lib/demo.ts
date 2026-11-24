@@ -1,32 +1,12 @@
 import { reportFromIncident } from "./incident-workflow";
+import type { z } from "zod";
+import type { incidentSchema, stepSchema, WorkspaceSnapshot } from "./workspace-schema";
 export type IncidentStatus =
   "New" | "Under Analysis" | "In Progress" | "Pending Escalation" | "Resolved" | "Closed";
 export type Severity = "Critical" | "High" | "Medium" | "Low";
 export type CheckStatus = "Not Started" | "In Progress" | "Verified" | "Not Applicable";
-export interface Incident {
-  id: string;
-  site: string;
-  location: string;
-  category: string;
-  model: string;
-  domain: string;
-  description: string;
-  alarms: string;
-  date: string;
-  severity: Severity;
-  status: IncidentStatus;
-  observations: string;
-  attachments: string[];
-}
-export interface DiagnosticStep {
-  id: string;
-  title: string;
-  description: string;
-  reason?: string;
-  expected?: string;
-  status: CheckStatus;
-  result: string;
-}
+export type Incident = z.infer<typeof incidentSchema>;
+export type DiagnosticStep = z.infer<typeof stepSchema>;
 export interface DemoMessage {
   id: string;
   role: "user" | "assistant";
@@ -45,16 +25,7 @@ export interface Activity {
   incident: string;
   time: string;
 }
-export interface SavedDocument {
-  source?: string;
-  id: string;
-  kind: "report" | "escalation";
-  incidentId: string;
-  title: string;
-  content: string;
-  validated: boolean;
-  date: string;
-}
+export type SavedDocument = WorkspaceSnapshot["documents"][number];
 
 export const sampleIncidents: Incident[] = [
   {

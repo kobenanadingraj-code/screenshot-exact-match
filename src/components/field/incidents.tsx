@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { useDemo } from "@/lib/demo-context";
 import type { Incident, Severity } from "@/lib/demo";
+import { incidentSchema } from "@/lib/workspace-schema";
 import { Status, IncidentLink, OpenIncidentButton, SafetyNote } from "./shared";
 import { nextIncidentId, localDateTime, validateIncident } from "@/lib/incident-workflow";
 import { toast } from "sonner";
@@ -46,13 +47,18 @@ export function NewIncident({
       toast.error("Site, equipment category, and description are required.");
       return;
     }
+    const domain = incidentSchema.shape.domain.safeParse(field("domain"));
+    if (!domain.success) {
+      toast.error("Select a valid network domain.");
+      return;
+    }
     const incident: Incident = {
       id,
       site: field("site"),
       location: field("location"),
       category: field("category"),
       model: field("model") || "Not provided",
-      domain: field("domain"),
+      domain: domain.data,
       description: field("description"),
       alarms: field("alarms"),
       observations: field("observations"),

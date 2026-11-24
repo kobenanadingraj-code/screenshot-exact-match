@@ -7,6 +7,7 @@
 - [x] Calculate consistent dashboard statistics from current records.
 - [x] Test the complete incident-to-report workflow on desktop and mobile without redesigning the dashboard.
 ## Phase 3
+- [x] Repair missing AI dependencies and workspace type incompatibilities; verify the app opens.
 - [ ] Connect registration, login, profiles, protected pages and logout.
 - [ ] Persist owner-scoped incidents, analyses, checks, reports and history.
 - [ ] Connect real structured AI analysis and assistant without simulated fallbacks.

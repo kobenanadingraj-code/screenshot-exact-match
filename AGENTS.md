@@ -38,3 +38,4 @@ use the editor.
 - Store incident analyses and per-incident verification steps in the shared session context, using incident source fingerprints to invalidate outdated assessments and document validation after record changes.
 - Derive dashboard KPIs and domain distributions from current incident/report records, and cascade incident deletion to linked analyses, checks, and reports to prevent inconsistent counts.
 - Generate PDF and DOCX files through lazy-loaded browser libraries; this makes exports functional without server dependencies.
+- Derive incident, diagnostic-step and saved-document types from their workspace validation schemas so UI records and authenticated function payloads cannot drift apart.
