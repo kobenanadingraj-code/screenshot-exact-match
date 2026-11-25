@@ -1,5 +1,9 @@
 # AI FIELD ASSISTANT
 
+## Français
+- [ ] Traduire les pages, les messages, les contenus générés et les exports sans modifier les données enregistrées.
+- [ ] Vérifier la connexion et les pages opérationnelles en français.
+
 - [x] Establish the approved design and nine demonstration workspaces.
 - [x] Complete incident creation, editing, confirmed deletion, severity/status filtering, and date sorting.
 - [x] Generate editable incident-specific analysis and linked diagnostic steps with reasons and expected results.
